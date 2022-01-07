@@ -1,0 +1,21 @@
+{
+  "name": "listit-be",
+  "version": "1.0.0",
+  "description": "listit_app",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest",
+    "db": "psql -f ./db/test/setup.sql"
+  },
+  "author": "stephencorke",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "pg": "^8.7.1",
+    "pg-format": "^1.0.4"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}

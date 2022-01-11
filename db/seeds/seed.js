@@ -3,7 +3,7 @@ const format = require("pg-format");
 const { formatData } = require("../utils/data-manipulation.js");
 
 const seed = (data) => {
-  const { categoryData, commentData, topicData, userData } = data;
+  const { categoryData, commentData, itemData, userData } = data;
   return db
     .query("DROP TABLE IF EXISTS items;")
     .then(() => {
@@ -38,16 +38,29 @@ const seed = (data) => {
     })
     .then((res) => {
       console.log(res.rows);
+    })
+    .then(() => {
+      const keys = [
+        "item_name",
+        "item_link",
+        "item_notes",
+        "item_location",
+        "category",
+      ];
+      const formattedTopics = formatData(itemData, keys);
+      const queryString = format(
+        "INSERT INTO items (item_name, item_link, item_notes, item_location, category) VALUES %L;",
+        formattedTopics
+      );
+      return db.query(queryString);
+    })
+    .then(() => {
+      const queryString = format("SELECT * FROM items");
+      return db.query(queryString);
+    })
+    .then((res) => {
+      console.log(res.rows);
     });
-  // .then(() => {
-  //   const keys = ["slug", "description"];
-  //   const formattedTopics = formatData(topicData, keys);
-  //   const queryString = format(
-  //     "INSERT INTO topics (slug, description) VALUES %L;",
-  //     formattedTopics
-  //   );
-  //   return db.query(queryString);
-  // })
   // .then(() => {
   //   const keys = ["title", "body", "votes", "topic", "author", "created_at"];
   //   const formattedArticles = formatData(articleData, keys);

@@ -32,8 +32,7 @@ const seed = (data) => {
       const queryString = format("SELECT * FROM categories");
       return db.query(queryString);
     })
-    .then((res) => {
-      console.log(res.rows);
+    .then(() => {
     })
     .then(() => {
       const keys = [
@@ -54,27 +53,9 @@ const seed = (data) => {
       const queryString = format("SELECT * FROM items");
       return db.query(queryString);
     })
-    .then((res) => {
-      console.log(res.rows);
+    .then(() => {
     });
-  // .then(() => {
-  //   const keys = ["title", "body", "votes", "topic", "author", "created_at"];
-  //   const formattedArticles = formatData(articleData, keys);
-  //   const queryString = format(
-  //     "INSERT INTO articles (title, body, votes, topic, author, created_at) VALUES %L;",
-  //     formattedArticles
-  //   );
-  //   return db.query(queryString);
-  // })
-  // .then(() => {
-  //   const keys = ["author", "article_id", "votes", "created_at", "body"];
-  //   const formattedComments = formatData(commentData, keys);
-  //   const queryString = format(
-  //     "INSERT INTO comments (author, article_id, votes, created_at, body) VALUES %L;",
-  //     formattedComments
-  //   );
-  //   return db.query(queryString);
-  // });
+ 
 };
 
 module.exports = { seed };

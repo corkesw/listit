@@ -1,4 +1,10 @@
-exports.getWelcome = (req, res) => {
-  console.log("in controller");
-  res.status(200).send({ msg: "Welcome" });
+const categories = require("../db/data/test-data/categories");
+const { selectCategories } = require("../models/models");
+
+exports.getCategories = (req, res, next) => {
+  selectCategories()
+    .then((categories) => {
+      res.status(200).send({ categories });
+    })
+    .catch(next);
 };

@@ -20,3 +20,22 @@ describe("/api", () => {
     });
   });
 });
+
+describe("/api/categories", () => {
+  describe("GET", () => {
+    test("200: should respond with an array of categories", () => {
+      return request(app)
+        .get("/api/categories")
+        .expect(200)
+        .then(({ body }) => {
+          expect(body.categories).toHaveLength(4);
+          body.categories.forEach((category) => {
+            expect.objectContaining({
+              category: expect.any(String),
+              has_current: expect.any(Boolean),
+            });
+          });
+        });
+    });
+  });
+});

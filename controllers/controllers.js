@@ -1,5 +1,9 @@
 const categories = require("../db/data/test-data/categories");
-const { selectCategories, selectItems } = require("../models/models");
+const {
+  selectCategories,
+  selectItems,
+  addCategory,
+} = require("../models/models");
 
 exports.getCategories = (req, res, next) => {
   selectCategories()
@@ -10,7 +14,18 @@ exports.getCategories = (req, res, next) => {
 };
 
 exports.getItems = (req, res, next) => {
-  selectItems().then((items) => {
-    res.status(200).send({ items });
-  });
+  selectItems()
+    .then((items) => {
+      res.status(200).send({ items });
+    })
+    .catch(next);
+};
+
+exports.postCategory = (req, res, next) => {
+  const { body } = req;
+  addCategory(body)
+    .then((category) => {
+      res.status(201).send({ category });
+    })
+    .catch(next);
 };

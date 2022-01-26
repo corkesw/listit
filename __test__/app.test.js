@@ -11,8 +11,15 @@ afterAll(() => db.end());
 expect.extend({
   toBeNullOrType(received, type) {
     if (typeof received === type || received === null) {
-      return { pass: true };
-    } else return { pass: false };
+      return {
+        pass: true,
+      };
+    } else
+      return {
+        message: () =>
+          `expected ${received} to be typeof ${type} or to be null`,
+        pass: false,
+      };
   },
 });
 
@@ -62,6 +69,21 @@ describe("/api/categories", () => {
         });
     });
   });
+  describe("POST", () => {
+    test.only("201: should respond with the posted item", () => {
+      return request(app)
+        .post("/api/categories")
+        .send({ category: "bananas", has_current: true })
+        .expect(201)
+        .then(({ body }) => {
+          expect(body.category).toEqual({
+            category: "bananas",
+            has_current: true,
+            id: 5,
+          });
+        });
+    });
+  });
 });
 
 describe("/api/items", () => {
@@ -70,7 +92,8 @@ describe("/api/items", () => {
       return request(app)
         .get("/api/items")
         .expect(200)
-        .then(({ body }) =>
+        .then(({ body }) => {
+          expect(body.items).toHaveLength(4);
           body.items.forEach((item) => {
             expect(item).toEqual(
               expect.objectContaining({
@@ -84,8 +107,8 @@ describe("/api/items", () => {
                 current: expect.toBeNullOrType("boolean"),
               })
             );
-          })
-        );
+          });
+        });
     });
   });
 });

@@ -11,7 +11,7 @@ const seed = (data) => {
     })
     .then(() => {
       return db.query(
-        "CREATE TABLE categories (id SERIAL PRIMARY KEY, category VARCHAR(25) NOT NULL, has_current BOOLEAN);"
+        "CREATE TABLE categories (id SERIAL PRIMARY KEY, category VARCHAR(25) NOT NULL, has_current BOOLEAN NOT NULL);"
       );
     })
     .then(() => {

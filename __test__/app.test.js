@@ -8,6 +8,14 @@ beforeEach(() => seed(testData));
 
 afterAll(() => db.end());
 
+expect.extend({
+  toBeNullOrType(received, type) {
+    if (typeof received === type || received === null) {
+      return { pass: true };
+    } else return { pass: false };
+  },
+});
+
 describe("/notandendpoint", () => {
   describe("ALL", () => {
     test("404 : should return 404 for non-existent endpoint", () => {
@@ -43,10 +51,13 @@ describe("/api/categories", () => {
         .then(({ body }) => {
           expect(body.categories).toHaveLength(4);
           body.categories.forEach((category) => {
-            expect.objectContaining({
-              category: expect.any(String),
-              has_current: expect.any(Boolean),
-            });
+            expect(category).toEqual(
+              expect.objectContaining({
+                id: expect.any(Number),
+                category: expect.any(String),
+                has_current: expect.any(Boolean),
+              })
+            );
           });
         });
     });
@@ -56,7 +67,25 @@ describe("/api/categories", () => {
 describe("/api/items", () => {
   describe("GET", () => {
     test("200: should return all items", () => {
-      return request(app).get("/api/items").expect(200);
+      return request(app)
+        .get("/api/items")
+        .expect(200)
+        .then(({ body }) =>
+          body.items.forEach((item) => {
+            expect(item).toEqual(
+              expect.objectContaining({
+                id: expect.any(Number),
+                item_name: expect.any(String),
+                item_link: expect.toBeNullOrType("string"),
+                item_notes: expect.toBeNullOrType("string"),
+                item_location: expect.toBeNullOrType("string"),
+                item_completed: expect.any(Boolean),
+                category: expect.any(Number),
+                current: expect.toBeNullOrType("boolean"),
+              })
+            );
+          })
+        );
     });
   });
 });

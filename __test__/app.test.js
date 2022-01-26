@@ -52,3 +52,11 @@ describe("/api/categories", () => {
     });
   });
 });
+
+describe("/api/items", () => {
+  describe("GET", () => {
+    test("200: should return all items", () => {
+      return request(app).get("/api/items").expect(200);
+    });
+  });
+});

@@ -16,7 +16,7 @@ const seed = (data) => {
     })
     .then(() => {
       return db.query(
-        "CREATE TABLE items (id SERIAL PRIMARY KEY, item_name VARCHAR(100) NOT NULL, item_link VARCHAR(1000), item_notes VARCHAR(1000), item_location VARCHAR(1000), item_completed BOOLEAN DEFAULT false, category INT REFERENCES categories(id));"
+        "CREATE TABLE items (id SERIAL PRIMARY KEY, item_name VARCHAR(100) NOT NULL, item_link VARCHAR(1000), item_notes VARCHAR(1000), item_location VARCHAR(1000), item_completed BOOLEAN DEFAULT false, category INT REFERENCES categories(id), current BOOLEAN);"
       );
     })
     .then(() => {
@@ -32,8 +32,7 @@ const seed = (data) => {
       const queryString = format("SELECT * FROM categories");
       return db.query(queryString);
     })
-    .then(() => {
-    })
+    .then(() => {})
     .then(() => {
       const keys = [
         "item_name",
@@ -41,10 +40,12 @@ const seed = (data) => {
         "item_notes",
         "item_location",
         "category",
+        "current",
+        "item_completed",
       ];
       const formattedTopics = formatData(itemData, keys);
       const queryString = format(
-        "INSERT INTO items (item_name, item_link, item_notes, item_location, category) VALUES %L;",
+        "INSERT INTO items (item_name, item_link, item_notes, item_location, category, current, item_completed) VALUES %L;",
         formattedTopics
       );
       return db.query(queryString);
@@ -53,9 +54,7 @@ const seed = (data) => {
       const queryString = format("SELECT * FROM items");
       return db.query(queryString);
     })
-    .then(() => {
-    });
- 
+    .then(() => {});
 };
 
 module.exports = { seed };

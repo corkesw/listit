@@ -8,6 +8,19 @@ beforeEach(() => seed(testData));
 
 afterAll(() => db.end());
 
+describe("/notandendpoint", () => {
+  describe("ALL", () => {
+    test("404 : should return 404 for non-existent endpoint", () => {
+      return request(app)
+        .get("/notanedpoint")
+        .expect(404)
+        .then(({ body }) =>
+          expect(body.msg).toBe("That's not an endpoint you 'nana!")
+        );
+    });
+  });
+});
+
 describe("/api", () => {
   describe("GET", () => {
     test("200: should respond with welcome message ", () => {

@@ -7,27 +7,23 @@ const seed = (data) => {
   return db
     .query("DROP TABLE IF EXISTS items;")
     .then(() => {
-      console.log("dropped items");
       return db.query("DROP TABLE IF EXISTS categories;");
     })
     .then(() => {
-      console.log("dropped categories");
       return db.query(
-        "CREATE TABLE categories (id SERIAL PRIMARY KEY, category VARCHAR(25) NOT NULL);"
+        "CREATE TABLE categories (id SERIAL PRIMARY KEY, category VARCHAR(25) NOT NULL, has_current BOOLEAN);"
       );
     })
     .then(() => {
-      console.log("created categories");
       return db.query(
         "CREATE TABLE items (id SERIAL PRIMARY KEY, item_name VARCHAR(100) NOT NULL, item_link VARCHAR(1000), item_notes VARCHAR(1000), item_location VARCHAR(1000), item_completed BOOLEAN DEFAULT false, category INT REFERENCES categories(id));"
       );
     })
     .then(() => {
-      console.log("created items");
-      const keys = ["category"];
+      const keys = ["category", "hasCurrent"];
       const formattedCategories = formatData(categoryData, keys);
       const queryString = format(
-        "INSERT INTO categories (category) VALUES %L;",
+        "INSERT INTO categories (category, has_current) VALUES %L;",
         formattedCategories
       );
       return db.query(queryString);
